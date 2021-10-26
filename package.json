@@ -1,0 +1,22 @@
+{
+  "name": "task-manager",
+  "version": "1.0.0",
+  "description": "task manager app using node and express",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Levvw/task-manager.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Levvw/task-manager/issues"
+  },
+  "homepage": "https://github.com/Levvw/task-manager#readme",
+  "dependencies": {
+    "mongodb": "^4.1.3"
+  }
+}
