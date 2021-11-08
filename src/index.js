@@ -4,6 +4,7 @@ const port = process.env.PORT || 3000;
 
 require("./db/mongoose"); // insures that the file runs and so db is connected
 const User = require("./models/user");
+const Task = require("./models/task");
 app.use(express.json()); // automatically parses json into objects so we can use themv
 
 app.post("/users", (req, res) => {
@@ -13,6 +14,17 @@ app.post("/users", (req, res) => {
     .then(() => {
       console.log("User Added");
       res.send(user);
+    })
+    .catch((e) => {
+      res.status(400).send(e);
+    });
+});
+app.post("/tasks", (req, res) => {
+  const task = new Task(req.body);
+  task
+    .save()
+    .then(() => {
+      res.send(task);
     })
     .catch((e) => {
       res.status(400).send(e);
