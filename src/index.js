@@ -39,6 +39,14 @@ app.get("/users", (req, res) => {
     res.status(200).send(data);
   });
 });
+app.get("/users/:id", (req, res) => {
+  User.findById(req.params.id, (err, data) => {
+    if (err) {
+      res.status(500).send(err);
+    }
+    res.status(200).send(data);
+  });
+});
 
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
