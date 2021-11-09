@@ -42,6 +42,24 @@ app.get("/users", (req, res) => {
 app.get("/users/:id", (req, res) => {
   User.findById(req.params.id, (err, data) => {
     if (err) {
+      res.status(404).send(err);
+    }
+    res.status(200).send(data);
+  });
+});
+
+app.get("/tasks", (req, res) => {
+  Task.find({}, (err, data) => {
+    if (err) {
+      res.status(500).send(err);
+    }
+    res.status(200).send(data);
+  });
+});
+
+app.get("/tasks/:id", (req, res) => {
+  Task.findById(req.params.id, (err, data) => {
+    if (err) {
       res.status(500).send(err);
     }
     res.status(200).send(data);
