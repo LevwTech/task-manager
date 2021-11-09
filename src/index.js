@@ -31,6 +31,15 @@ app.post("/tasks", (req, res) => {
     });
 });
 
+app.get("/users", (req, res) => {
+  User.find({}, (err, data) => {
+    if (err) {
+      res.status(500).send(err);
+    }
+    res.status(200).send(data);
+  });
+});
+
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
 });
