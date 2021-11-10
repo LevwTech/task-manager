@@ -19,17 +19,6 @@ app.post("/users", (req, res) => {
       res.status(400).send(e);
     });
 });
-app.post("/tasks", (req, res) => {
-  const task = new Task(req.body);
-  task
-    .save()
-    .then(() => {
-      res.status(201).send(task);
-    })
-    .catch((e) => {
-      res.status(400).send(e);
-    });
-});
 
 app.get("/users", (req, res) => {
   User.find({}, (err, data) => {
@@ -46,6 +35,37 @@ app.get("/users/:id", (req, res) => {
     }
     res.status(200).send(data);
   });
+});
+app.patch("/users/:id", (req, res) => {
+  const allowedUpdates = ["name", "email", "password", "age"];
+  const updates = Object.keys(req.body);
+  const isValidUpdate = updates.every((item) => allowedUpdates.includes(item));
+  if (!isValidUpdate) return res.status(400).send("invalid update");
+  User.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    { runValidators: true, new: true },
+    (err, data) => {
+      if (err) {
+        return res.status(400).send(err);
+      }
+      if (!data) {
+        return res.status(404).send("User not Found");
+      }
+      res.send(data);
+    }
+  );
+});
+app.post("/tasks", (req, res) => {
+  const task = new Task(req.body);
+  task
+    .save()
+    .then(() => {
+      res.status(201).send(task);
+    })
+    .catch((e) => {
+      res.status(400).send(e);
+    });
 });
 
 app.get("/tasks", (req, res) => {
