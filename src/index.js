@@ -56,6 +56,32 @@ app.patch("/users/:id", (req, res) => {
     }
   );
 });
+app.delete("tasks/:id", (req, res) => {
+  Task.findByIdAndDelete(req.params.id, (err, data) => {
+    if (err) {
+      return res.status(400).send(err);
+    }
+    if (!data) {
+      return res.status(404).send("User Not Found");
+    }
+    res.send(data);
+  });
+});
+
+app.delete("users/:id", (req, res) => {
+  User.findByIdAndDelete(req.params.id, (err, data) => {
+    if (err) {
+      return res.status(400).send(err);
+    }
+    if (!data) {
+      return res.status(404).send("User Not Found");
+    }
+    res.send(data);
+  });
+});
+
+// ---------------------------------------------------------------------------------------------------
+
 app.post("/tasks", (req, res) => {
   const task = new Task(req.body);
   task
@@ -100,11 +126,22 @@ app.patch("/tasks/:id", (req, res) => {
         return res.status(400).send(err);
       }
       if (!data) {
-        return res.status(404).send("User Not Found");
+        return res.status(404).send("Task Not Found");
       }
       res.send(data);
     }
   );
+});
+app.delete("tasks/:id", (req, res) => {
+  Task.findByIdAndDelete(req.params.id, (err, data) => {
+    if (err) {
+      return res.status(400).send(err);
+    }
+    if (!data) {
+      return res.status(404).send("Task Not Found");
+    }
+    res.send(data);
+  });
 });
 
 app.listen(port, () => {
