@@ -50,7 +50,7 @@ app.patch("/users/:id", (req, res) => {
         return res.status(400).send(err);
       }
       if (!data) {
-        return res.status(404).send("User not Found");
+        return res.status(404).send("User Not Found");
       }
       res.send(data);
     }
@@ -84,6 +84,27 @@ app.get("/tasks/:id", (req, res) => {
     }
     res.status(200).send(data);
   });
+});
+
+app.patch("/tasks/:id", (req, res) => {
+  const allowedUpdates = ["description", "completed"];
+  const updates = Object.keys(req.body);
+  const isValidUpdate = updates.every((item) => allowedUpdates.includes(item));
+  if (!isValidUpdate) return res.status(400).send("invalid update");
+  Task.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    { runValidators: true, new: true },
+    (err, data) => {
+      if (err) {
+        return res.status(400).send(err);
+      }
+      if (!data) {
+        return res.status(404).send("User Not Found");
+      }
+      res.send(data);
+    }
+  );
 });
 
 app.listen(port, () => {
