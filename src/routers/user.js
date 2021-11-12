@@ -12,7 +12,7 @@ router.post("/users", async (req, res) => {
     res.status(400).send(e);
   }
 });
-
+// Method  for logging in
 router.post("/users/login", (req, res) => {
   const credentials = Object.keys(req.body);
   const requiredCredentials = ["email", "password"];
@@ -22,13 +22,26 @@ router.post("/users/login", (req, res) => {
   if (!isValidOperation) {
     return res.status(400).send("please send email and password");
   }
-  User.findOne({ email: req.body.email }, (err, data) => {
-    if (!data || err) return res.send("Invalid Credentials");
-    bcrypt.compare(req.body.password, data.password).then((exists) => {
-      res.send(exists);
+  User.findOne({ email: req.body.email }, (err, user) => {
+    if (!user || err) return res.send("Invalid Credentials");
+    bcrypt.compare(req.body.password, user.password).then((exists) => {
+      if (exists) res.send(user);
+      else res.send("User Not Found");
     });
   });
 });
+// Method 2 Login
+// router.post("/users/login", async (req, res) => {
+//   try {
+//     const user = await User.findByCredentials(
+//       req.body.email,
+//       req.body.password
+//     );
+//     res.send(user);
+//   } catch (e) {
+//     res.status(400).send();
+//   }
+// });
 
 router.get("/users", async (req, res) => {
   try {
