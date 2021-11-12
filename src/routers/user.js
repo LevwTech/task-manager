@@ -7,7 +7,8 @@ router.post("/users", async (req, res) => {
 
   try {
     await user.save();
-    res.status(201).send(user);
+    const token = user.generateAuthToken();
+    res.status(201).send({ user, token });
   } catch (e) {
     res.status(400).send(e);
   }
@@ -25,8 +26,10 @@ router.post("/users/login", (req, res) => {
   User.findOne({ email: req.body.email }, (err, user) => {
     if (!user || err) return res.send("Invalid Credentials");
     bcrypt.compare(req.body.password, user.password).then((exists) => {
-      if (exists) res.send(user);
-      else res.send("User Not Found");
+      if (exists) {
+        const token = user.generateAuthToken();
+        res.send({ user, token });
+      } else res.send("User Not Found");
     });
   });
 });
