@@ -1,13 +1,15 @@
 const express = require("express");
+require("./db/mongoose");
 const userRouter = require("./routers/user");
 const taskRouter = require("./routers/task");
+
 const app = express();
 const port = process.env.PORT || 3000;
+
+app.use(express.json());
 app.use(userRouter);
 app.use(taskRouter);
-require("./db/mongoose"); // insures that the file runs and so db is connected
-app.use(express.json()); // automatically parses json into objects so we can use them
 
 app.listen(port, () => {
-  console.log(`Server started on port ${port}`);
+  console.log("Server is up on port " + port);
 });
