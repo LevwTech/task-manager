@@ -10,6 +10,7 @@ const auth = function (req, res, next) {
     (err, user) => {
       if (err || !user) return res.send("no user found");
       req.user = user;
+      req.token = token;
       next();
     }
   );
