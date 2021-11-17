@@ -82,7 +82,12 @@ userSchema.methods.generateAuthToken = function () {
   this.save().then(() => {});
   return token;
 };
-
+userSchema.methods.toJSON = function () {
+  const userObject = this.toObject();
+  delete userObject.password;
+  delete userObject.tokens;
+  return userObject;
+};
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;
