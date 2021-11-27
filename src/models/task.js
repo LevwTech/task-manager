@@ -14,7 +14,7 @@ const Task = mongoose.model("Task", {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: "User", // coverts the id of the user to the whole user document
-    // by: await task.populate('owner').execPopulate()
+    // by: await task.populate('owner').execPopulate() & task.owner
   },
 });
 
