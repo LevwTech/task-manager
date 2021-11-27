@@ -51,7 +51,7 @@ const userSchema = new mongoose.Schema({
   ],
 });
 
-// can get tasks of the user using: await user.populate('tasks').execPopulate() & user.tasks
+// can get tasks of the user using: await user.populate('tasks').execPopulate() & user.tasksY
 userSchema.virtual("tasks", {
   ref: "Task",
   localField: "_id",
