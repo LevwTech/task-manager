@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -51,7 +50,7 @@ const userSchema = new mongoose.Schema({
   ],
 });
 
-// can get tasks of the user using: await user.populate('tasks').execPopulate() & user.tasksY
+// can get tasks of the user using: await user.populate('tasks').execPopulate() & user.tasks
 userSchema.virtual("tasks", {
   ref: "Task",
   localField: "_id",
@@ -95,6 +94,7 @@ userSchema.methods.toJSON = function () {
   delete userObject.tokens;
   return userObject;
 };
+
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;

@@ -1,5 +1,6 @@
 const express = require("express");
 const User = require("../models/user");
+const Task = require("../models/task");
 const router = new express.Router();
 const bcrypt = require("bcryptjs");
 const auth = require("../middleware/auth");
@@ -114,6 +115,8 @@ router.patch("/users/me", auth, async (req, res) => {
 router.delete("/users/me", auth, async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.user._id);
+    await Task.deleteMany({ owner: user._id });
+
     res.send(user);
     // another method
     // await req.user.remove();
