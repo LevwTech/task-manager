@@ -31,7 +31,6 @@ router.get("/tasks/:id", auth, async (req, res) => {
 
   try {
     const task = await Task.findOne({ _id, owner: req.user_id });
-    console.log(task);
 
     if (!task) {
       return res.status(404).send();
