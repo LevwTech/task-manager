@@ -19,10 +19,13 @@ router.get("/tasks", auth, async (req, res) => {
     if (req.query.completed) {
       const tasks = await Task.find({
         owner: req.user._id,
-        completed: req.query.completed,
+        completed: req.query.completed, // filtering
       })
-        .limit(1)
-        .skip(2);
+        .limit(1) // pagination
+        .skip(2)
+
+        .sort({ description: "asc" }); // sorting
+
       res.send(tasks);
     } else {
       const tasks = await Task.find({
