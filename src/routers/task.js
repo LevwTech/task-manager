@@ -20,15 +20,15 @@ router.get("/tasks", auth, async (req, res) => {
       const tasks = await Task.find({
         owner: req.user._id,
         completed: req.query.completed,
-      });
-      // another method
-      // await req.user.populate("tasks").execPopulate();
-      // res.send(req.user.tasks);
+      })
+        .limit(1)
+        .skip(2);
       res.send(tasks);
     } else {
       const tasks = await Task.find({
         owner: req.user._id,
       });
+
       // another method
       // await req.user.populate("tasks").execPopulate();
       // res.send(req.user.tasks);
