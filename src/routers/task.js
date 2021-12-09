@@ -16,11 +16,24 @@ router.post("/tasks", auth, async (req, res) => {
 
 router.get("/tasks", auth, async (req, res) => {
   try {
-    const tasks = await Task.find({ owner: req.user._id });
-    //  // another method
-    // await req.user.populate('tasks').execPopulate()
-    // res.send(req.user.tasks)
-    res.send(tasks);
+    if (req.query.completed) {
+      const tasks = await Task.find({
+        owner: req.user._id,
+        completed: req.query.completed,
+      });
+      // another method
+      // await req.user.populate("tasks").execPopulate();
+      // res.send(req.user.tasks);
+      res.send(tasks);
+    } else {
+      const tasks = await Task.find({
+        owner: req.user._id,
+      });
+      // another method
+      // await req.user.populate("tasks").execPopulate();
+      // res.send(req.user.tasks);
+      res.send(tasks);
+    }
   } catch (e) {
     res.status(500).send();
   }
