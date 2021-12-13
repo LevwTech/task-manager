@@ -13,7 +13,11 @@ const upload = multer({
   },
   fileFilter(req, file, cb) {
     // called when a file wants to upload
-    if (!file.originalname.endsWith("jpg"))
+    if (
+      !file.originalname.endsWith("jpg") ||
+      !file.originalname.endsWith("jpeg") ||
+      !file.originalname.endsWith("png") // or use /regex/
+    )
       return cb(new Error("File must be an Image")); // if things go bad
 
     cb(undefined, true); // if things go well
