@@ -5,7 +5,21 @@ const router = new express.Router();
 const bcrypt = require("bcryptjs");
 const auth = require("../middleware/auth");
 const multer = require("multer");
-const upload = multer({ dest: "avatars" });
+
+const upload = multer({
+  dest: "avatars",
+  limits: {
+    fileSize: 1000000, // in bytes
+  },
+  fileFilter(req, file, cb) {
+    // called when a file wants to upload
+    if (!file.originalname.endsWith("jpg"))
+      return cb(new Error("File must be an Image")); // if things go bad
+
+    cb(undefined, true); // if things go well
+  },
+});
+
 router.post("/users", async (req, res) => {
   const user = new User(req.body);
 

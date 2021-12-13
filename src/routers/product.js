@@ -18,9 +18,10 @@ router.get("/products", async (res, req) => {
 });
 
 const multer = require("multer");
-const upload = multer({ dest: "images" }); // configuration object , destniation is images root folder
+// configuration object , destniation is images root folder
+const upload = multer({ dest: "images" });
+// 'upload' is the name or key
 router.post("/image", upload.single("upload"), (req, res) => {
-  // 'uplpoad' is the name or key
   res.send();
 });
 
