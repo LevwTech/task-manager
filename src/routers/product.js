@@ -21,8 +21,16 @@ const multer = require("multer");
 // configuration object , destniation is images root folder
 const upload = multer({ dest: "images" });
 // 'upload' is the name or key
-router.post("/image", upload.single("upload"), (req, res) => {
-  res.send();
-});
+router.post(
+  "/image",
+  upload.single("upload"),
+  (req, res) => {
+    res.send();
+  },
+  //2nd parameter to post for better handle errors
+  (error, req, res, next) => {
+    res.status(400).send(error.message);
+  }
+);
 
 module.exports = router;

@@ -11,15 +11,12 @@ const upload = multer({
   limits: {
     fileSize: 1000000, // in bytes
   },
+  // called when a file wants to upload
   fileFilter(req, file, cb) {
-    // called when a file wants to upload
-    if (
-      !file.originalname.endsWith("jpg") ||
-      !file.originalname.endsWith("jpeg") ||
-      !file.originalname.endsWith("png") // or use /regex/
-    )
+    // regular expression for img extensions
+    if (!file.originalname.match(/\.(jpe?g|png|gif|bmp)$/)) {
       return cb(new Error("File must be an Image")); // if things go bad
-
+    }
     cb(undefined, true); // if things go well
   },
 });
@@ -146,8 +143,15 @@ router.delete("/users/me", auth, async (req, res) => {
   }
 });
 
-router.post("/users/me/avatar", upload.single("avatar"), (req, res) => {
-  res.send();
-});
+router.post(
+  "/users/me/avatar",
+  upload.single("avatar"),
+  (req, res) => {
+    res.send();
+  },
+  (error, req, res, next) => {
+    res.status(400).send(error.message);
+  }
+);
 
 module.exports = router;
