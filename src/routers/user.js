@@ -4,6 +4,8 @@ const Task = require("../models/task");
 const router = new express.Router();
 const bcrypt = require("bcryptjs");
 const auth = require("../middleware/auth");
+const multer = require("multer");
+const upload = multer({ dest: "avatars" });
 router.post("/users", async (req, res) => {
   const user = new User(req.body);
 
@@ -124,6 +126,10 @@ router.delete("/users/me", auth, async (req, res) => {
   } catch (e) {
     res.status(500).send();
   }
+});
+
+router.post("/users/me/avatar", upload.single("avatar"), (req, res) => {
+  res.send();
 });
 
 module.exports = router;
