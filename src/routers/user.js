@@ -7,7 +7,6 @@ const auth = require("../middleware/auth");
 const multer = require("multer");
 
 const upload = multer({
-  dest: "avatars",
   limits: {
     fileSize: 1000000, // in bytes
   },
@@ -145,13 +144,35 @@ router.delete("/users/me", auth, async (req, res) => {
 
 router.post(
   "/users/me/avatar",
+  auth,
   upload.single("avatar"),
-  (req, res) => {
+  async (req, res) => {
+    req.user.avatar = req.file.buffer;
+    await req.user.save();
     res.send();
   },
   (error, req, res, next) => {
     res.status(400).send(error.message);
   }
 );
+router.delete("/users/me/avatar", auth, async (req, res) => {
+  req.user.avatar = undefined;
+  await req.user.save();
+  res.status(200).send();
+});
+router.get("/users/:id/avatar", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user || !user.avatar) {
+      throw new Error("no user or no avatar");
+    }
+    // setting response header its application/json by default we change to image/jpg
+    res.set("Content-Type", "image/jpg");
+    res.send(user.avatar);
+  } catch (e) {
+    res.status(404).send();
+  }
+});
 
 module.exports = router;
