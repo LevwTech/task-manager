@@ -105,6 +105,7 @@ userSchema.methods.toJSON = function () {
   const userObject = this.toObject();
   delete userObject.password;
   delete userObject.tokens;
+  delete userObject.avatar; // to not slow down the request of read profile
   return userObject;
 };
 
