@@ -5,7 +5,8 @@ const router = new express.Router();
 const bcrypt = require("bcryptjs");
 const auth = require("../middleware/auth");
 const multer = require("multer");
-
+const sharp = require("sharp");
+const { sendWelcomeEmail } = require("../mail/account");
 const upload = multer({
   limits: {
     fileSize: 1000000, // in bytes
@@ -25,6 +26,7 @@ router.post("/users", async (req, res) => {
 
   try {
     await user.save();
+    sendWelcomeEmail(user.email, user.name);
     const token = user.generateAuthToken();
     res.status(201).send({ user, token });
   } catch (e) {
@@ -147,7 +149,11 @@ router.post(
   auth,
   upload.single("avatar"),
   async (req, res) => {
-    req.user.avatar = req.file.buffer;
+    const imageBuffer = await sharp(req.file.buffer)
+      .png()
+      .resize(200) // use client side tool also to resize
+      .toBuffer();
+    req.user.avatar = imageBuffer;
     await req.user.save();
     res.send();
   },
@@ -168,11 +174,12 @@ router.get("/users/:id/avatar", async (req, res) => {
       throw new Error("no user or no avatar");
     }
     // setting response header its application/json by default we change to image/jpg
-    res.set("Content-Type", "image/jpg");
+    res.set("Content-Type", "image/png");
     res.send(user.avatar);
   } catch (e) {
     res.status(404).send();
   }
 });
+//           <img src="GET-REQ-URL"></img>
 
 module.exports = router;

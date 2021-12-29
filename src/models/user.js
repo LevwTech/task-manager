@@ -95,7 +95,7 @@ userSchema.pre("save", async function (next) {
 });
 
 userSchema.methods.generateAuthToken = function () {
-  const token = jwt.sign({ _id: this._id }, "authtoken");
+  const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET);
   // this.tokens = this.tokens.concat({ token });
   this.tokens.push({ token });
   this.save().then(() => {});
