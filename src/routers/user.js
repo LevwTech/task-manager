@@ -6,7 +6,7 @@ const bcrypt = require("bcryptjs");
 const auth = require("../middleware/auth");
 const multer = require("multer");
 const sharp = require("sharp");
-const { sendWelcomeEmail } = require("../mail/account");
+const { sendWelcomeMail } = require("../mail/account");
 const upload = multer({
   limits: {
     fileSize: 1000000, // in bytes
@@ -26,13 +26,14 @@ router.post("/users", async (req, res) => {
 
   try {
     await user.save();
-    sendWelcomeEmail(user.email, user.name);
+    sendWelcomeMail(user.email, user.name);
     const token = user.generateAuthToken();
     res.status(201).send({ user, token });
   } catch (e) {
     res.status(400).send(e);
   }
 });
+
 // Method  for logging in
 router.post("/users/login", (req, res) => {
   const credentials = Object.keys(req.body);
