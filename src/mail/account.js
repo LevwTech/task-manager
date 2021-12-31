@@ -17,5 +17,4 @@ function sendWelcomeMail(to, name) {
       console.log(e);
     });
 }
-
 module.exports = { sendWelcomeMail };
